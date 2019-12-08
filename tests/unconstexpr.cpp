@@ -13,6 +13,8 @@ struct tuple {
   }
 };
 
+template<int> void req() {}
+
 int main() {
   using namespace unconstexpr;
 
@@ -24,9 +26,12 @@ int main() {
   static_assert(++v == 2);
   static_assert(v++ == 2);
   static_assert(*v == 3);
+  static_assert(--v == 2);
+  static_assert(v-- == 1);
 
-  v << [] { return 0; };
-  static_assert(*v == 0);
+  v << [] { return 42; };
+  static_assert(*v == 42);
+  req<*v>(); //force evalution, static assert might silently fail !!
 
   v << [] { return "hello"sv; };
   static_assert(*v == "hello"sv);

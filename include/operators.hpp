@@ -16,6 +16,13 @@ constexpr auto operator++(Meta const &, Opt...) {
   return increment<Meta, is_postincrement, inc, Id>();
 }
 
+template <class Meta, class... Opt, HACKESSOR>
+constexpr auto operator--(Meta const &, Opt...) {
+  constexpr bool is_postincrement = sizeof...(Opt) != 0;
+  using inc = value_t<-1*Meta::increment>;
+  return increment<Meta, is_postincrement, inc, Id>();
+}
+
 template <class Meta, auto Value, HACKESSOR>
 constexpr auto operator+=(Meta const &c, value_t<Value> const &) {
   static_assert(sizeof(increment<Meta, false, value_t<Value>, Id>()));
