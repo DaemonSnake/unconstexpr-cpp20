@@ -5,6 +5,14 @@
 
 using namespace std::literals;
 
+template <class... Args>
+struct tuple {
+  template <class T>
+  constexpr auto operator+(T const &) const {
+    return tuple<Args..., T>{};
+  }
+};
+
 int main() {
   using namespace unconstexpr;
 
@@ -23,4 +31,12 @@ int main() {
 
   v << [] { return "hello"sv; };
   static_assert(*v == "hello"sv);
+
+
+  v << [] { return tuple<>{}; };
+  v += value_t<42>{};
+  v += value_t<nullptr>{};
+  v += value_t<42>{};
+  using expected = tuple<int, std::nullptr_t, int>;
+  static_assert(std::is_same_v<decltype(*v), expected>);
 }
