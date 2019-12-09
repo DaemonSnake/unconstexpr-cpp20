@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Godbolt C/C++ CI
 
 on: [push]
 
@@ -19,5 +19,6 @@ jobs:
 
     - name: test gcc 9.1
       run: curl 'https://godbolt.org/api/compiler/g91/compile?options=-std=c%2b%2b2a' --data-binary "$(cat output.cpp)"
+
     - name: test clang 9.0
       run: curl 'https://godbolt.org/api/compiler/clang900/compile?options=-std=c%2b%2b2a' --data-binary "$(cat output.cpp)"
