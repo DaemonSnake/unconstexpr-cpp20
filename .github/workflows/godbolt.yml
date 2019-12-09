@@ -1,6 +1,9 @@
 name: Godbolt C/C++ CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -22,3 +25,6 @@ jobs:
 
     - name: test clang 9.0
       run: curl 'https://godbolt.org/api/compiler/clang900/compile?options=-std=c%2b%2b2a' --data-binary "$(cat output.cpp)"
+
+    - name: godbolt header
+      run: cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
