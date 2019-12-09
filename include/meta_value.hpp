@@ -7,23 +7,32 @@ namespace unconstexpr {
 
 template <auto Init = 0, auto Inc = 1, FORCE_UNIQUE()>
 struct meta_value {
-  template <auto Index>
-  struct flag {
+  template <auto Index> struct flagCheck {
     template <id_value Id>
-    friend constexpr auto adl(flag, id_t<Id> const &);
+    friend constexpr auto adl(flagCheck, id_t<Id> const &);
+  };
+
+  template<auto Index> struct flagGet {
+    template <id_value Id>
+    friend constexpr auto adl(flagGet, id_t<Id> const &);
   };
 
   template <auto Index, class ValueHolder = value_t<Index>>
   struct writer {
     template <id_value Id>
-    friend constexpr auto adl(flag<Index>, id_t<Id> const &) {
+    friend constexpr auto adl(flagCheck<Index>, id_t<Id> const &) {
+      return true;
+    }
+
+    template<id_value Id>
+    friend constexpr auto adl(flagGet<Index>, id_t<Id> const &) {
       return ValueHolder::value;
     }
   };
 
   static_assert(sizeof(writer<0, value_t<Init>>));
 
-  template <auto Index, class T, class = decltype(adl(flag<Index>{}, T{}))>
+  template <auto Index, class T, class = decltype(adl(flagCheck<Index>{}, T{}))>
   static constexpr bool exists(int) {
     return true;
   }
@@ -46,7 +55,7 @@ struct meta_value {
   template <id_value Id, auto Index>
   static constexpr auto value() {
     using unique_type = id_t<Id>;
-    return adl(flag<Index>{}, unique_type{});
+    return adl(flagGet<Index>{}, unique_type{});
   }
 
   static constexpr bool is_meta_var = true;
