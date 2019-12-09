@@ -1,0 +1,65 @@
+name: Godbolt C/C++ CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  preprocessed_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: build preprocessed file
+      run: cpp include/unconstexpr.hpp | grep -v '^#' > output.cpp && cat tests/unconstexpr.cpp  | grep -v 'unconstexpr.hpp' >> output.cpp
+    - uses: actions/upload-artifact@v1
+      with:
+          name: output
+          path: output.cpp
+
+  godbolt_test:
+    runs-on: ubuntu-latest
+    needs: [preprocessed_test]
+    strategy:
+      matrix:
+        compiler: ['gcc trunk', 'clang trunk', 'gcc 9.1', 'clang 9.0']
+        include:
+          - compiler: 'gcc trunk'
+            id: 'gsnapshot'
+          - compiler: 'clang trunk'
+            id: 'clang_trunk'
+          - compiler: 'gcc 9.1'
+            id: 'g91'
+          - compiler: 'clang 9.0' 
+            id: 'clang900'
+
+    steps:
+    - uses: actions/download-artifact@v1
+      with:
+          name: output
+    - name: test ${{ matrix.compiler }}
+      run: curl 'https://godbolt.org/api/compiler/${{ matrix.id }}/compile?options=-std=c%2b%2b2a%20-O3' --data-binary "$(cat output/output.cpp)"
+
+  header:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        ref: godbolt
+    - name: godbolt header
+      run: |
+        git reset --hard origin/master
+        cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
+
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+        git add unconstexpr_godbolt.hpp
+        git commit -m "Update godbolt header"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: godbolt
+        github_token: ${{ secrets.GITHUB_TOKEN }}
