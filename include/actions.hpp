@@ -22,15 +22,31 @@ constexpr auto current_value(Meta const& = {}) {
   return Meta::template value<Id, idx>();
 }
 
+namespace increment_hack {
+/**
+  To circomvent bug in clang:
+  Constexpr variables aren't implicitly captured in lambda expressions if we are in a template context.
+  As some of the following constexpr variable might be invalid non-type template parameter,
+  we defines them here so that we can access them from a default-construstible lambda and pass it around.
+*/
+template <class Meta, class ValueInc, id_value Id>
+struct increment_info {
+  static constexpr auto idx = current_index<Meta, Id>();
+  static constexpr auto value = Meta::template value<Id, idx>();
+  static constexpr auto nvalue = value + ValueInc::value;
+};
+}  // namespace increment_hack
+
 template <class Meta, bool postincrement = false,
-          class Inc = value_t<Meta::increment>, HACKESSOR>
+          class ValueInc = value_t<Meta::increment>, HACKESSOR>
 constexpr auto increment(Meta const& = {}) {
-  constexpr auto idx = current_index<Meta, Id>();
-  constexpr auto value = Meta::template value<Id, idx>();
-  constexpr auto increment = Inc::value;
+  using hack = increment_hack::template increment_info<Meta, ValueInc, Id>;
+  constexpr auto idx = hack::idx;
+  constexpr auto value = hack::value;
+  constexpr auto nvalue = hack::nvalue;
   constexpr auto nidx = idx + Meta::increment;
-  constexpr auto nvalue = value + increment;
-  using value_holder = value_t<nvalue>;
+  constexpr auto lambda_next = [] { return hack::nvalue; };
+  using value_holder = value_lambda<decltype(lambda_next)>;
   static_assert(Meta::template set_value<nidx, value_holder>);
   if constexpr (postincrement)
     return value;
