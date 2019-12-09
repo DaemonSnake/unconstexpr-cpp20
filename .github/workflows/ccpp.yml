@@ -1,0 +1,17 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: build preprocessed file
+      run: cpp include/unconstexpr.hpp > output.cpp && cat tests/unconstexpr.cpp  | grep -v 'unconstexpr.hpp' >> output.cpp
+    - name: test latest gcc
+      run: curl 'https://godbolt.org/api/compiler/gsnapshot/compile?options=-std=c%2b%2b2a' --data-binary "$(cat output.cpp)"
+    - name: test latest clang
+      run: curl 'https://godbolt.org/api/compiler/clang_trunk/compile?options=-std=c%2b%2b2a' --data-binary "$(cat output.cpp)"
