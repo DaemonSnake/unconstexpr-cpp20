@@ -3,34 +3,82 @@
 # 1 "<command-line>"
 # 31 "<command-line>"
 # 1 "/usr/include/stdc-predef.h" 1 3 4
+
+# 1 "/usr/include/stdc-predef.h" 3 4
+/* Copyright (C) 1991-2018 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+
+
+
+
+/* This header is separate from features.h so that the compiler can
+   include it implicitly at the start of every compilation.  It must
+   not itself include <features.h> or any other header that includes
+   <features.h> because the implicit include comes before any feature
+   test macros that may be defined in a source file before it first
+   explicitly includes a system header.  GCC knows the name of this
+   header in order to preinclude it.  */
+
+/* glibc's intent is to support the IEC 559 math functionality, real
+   and complex.  If the GCC (4.9 and later) predefined macros
+   specifying compiler intent are available, use them to determine
+   whether the overall intent is to support these features; otherwise,
+   presume an older compiler has intent to support these features and
+   define these macros by default.  */
+# 52 "/usr/include/stdc-predef.h" 3 4
+/* wchar_t uses Unicode 10.0.0.  Version 10.0 of the Unicode Standard is
+   synchronized with ISO/IEC 10646:2017, fifth edition, plus
+   the following additions from Amendment 1 to the fifth edition:
+   - 56 emoji characters
+   - 285 hentaigana
+   - 3 additional Zanabazar Square characters */
+
+
+/* We do not support C11 <threads.h>.  */
 # 32 "<command-line>" 2
 # 1 "include/unconstexpr/unconstexpr.hpp"
 
-
-
-
+# 1 "include/unconstexpr/unconstexpr.hpp"
+// Copyright (c) 2019 Bastien Penavayre
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
        
 
 # 1 "include/unconstexpr/actions.hpp" 1
-
-
-
-
+// Copyright (c) 2019 Bastien Penavayre
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 
        
 
 # 1 "include/unconstexpr/unique_id.hpp" 1
-
-
-
-
+// Copyright (c) 2019 Bastien Penavayre
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
        
 
 namespace unconstexpr {
-
+// unique id section
 using id_value = const int *;
 
 template <id_value>
@@ -42,14 +90,23 @@ struct unique_id {
   constexpr unique_id(T const &) {}
   constexpr operator id_value() const { return &value; }
 };
-# 31 "include/unconstexpr/unique_id.hpp"
-}
+
+/**
+    The following is one of the base of this hack!
+    This works because the conversion from unique_id to bool is delayed,
+    therefore the lambda is a new one at each instantiation of a template
+   depending on that non-type template which leads to 'name' to have a different
+   value at each deduction
+*/
+
+
+} // namespace unconstexpr
 # 10 "include/unconstexpr/actions.hpp" 2
 # 1 "include/unconstexpr/utils.hpp" 1
-
-
-
-
+// Copyright (c) 2019 Bastien Penavayre
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
        
 
@@ -63,12 +120,12 @@ template <class Lambda>
 struct value_lambda {
   static constexpr auto value = Lambda{}();
 };
-}
+} // namespace unconstexpr
 # 11 "include/unconstexpr/actions.hpp" 2
 
-
-
-
+// force each call to be a new template instanciation
+// checks that Meta is a meta_var
+// simple workaround for lack of concepts
 
 
 namespace unconstexpr {
@@ -86,19 +143,19 @@ constexpr auto current_value(Meta const& = {}) {
 }
 
 namespace increment_hack {
-
-
-
-
-
-
+/**
+  To circomvent bug in clang:
+  Constexpr variables aren't implicitly captured in lambda expressions if we are in a template context.
+  As some of the following constexpr variable might be invalid non-type template parameter,
+  we defines them here so that we can access them from a default-construstible lambda and pass it around.
+*/
 template <class Meta, class ValueInc, id_value Id>
 struct increment_info {
   static constexpr auto idx = current_index<Meta, Id>();
   static constexpr auto value = Meta::template value<Id, idx>();
   static constexpr auto nvalue = value + ValueInc::value;
 };
-}
+} // namespace increment_hack
 
 template <class Meta, bool postincrement = false,
           class ValueInc = value_t<Meta::increment>, id_value Id = unique_id([] {}), bool = Meta::is_meta_var>
@@ -135,13 +192,13 @@ constexpr auto set(Meta const& = {}, Lambda const& = {}) {
   return holder::value;
 }
 
-}
+} // namespace unconstexpr
 # 9 "include/unconstexpr/unconstexpr.hpp" 2
 # 1 "include/unconstexpr/meta_value.hpp" 1
-
-
-
-
+// Copyright (c) 2019 Bastien Penavayre
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
        
 
@@ -212,13 +269,13 @@ struct meta_value {
   static constexpr bool set_value = sizeof(writer<Index, ValueHolder>);
 };
 
-}
+} // namespace unconstexpr
 # 10 "include/unconstexpr/unconstexpr.hpp" 2
 # 1 "include/unconstexpr/operators.hpp" 1
-
-
-
-
+// Copyright (c) 2019 Bastien Penavayre
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
        
 
@@ -263,5 +320,5 @@ constexpr auto operator<<(Meta const &c, Holder const &) {
   return c;
 }
 
-}
+} // namespace unconstexpr
 # 10 "include/unconstexpr/unconstexpr.hpp" 2
