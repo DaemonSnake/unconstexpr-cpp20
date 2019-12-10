@@ -31,12 +31,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2-beta
       with:
-        ref: master
-    - uses: actions/checkout@v2-beta
-      with:
         ref: godbolt
     - name: godbolt header
       run: |
+        git pull origin/master
         git branch --list
         git reset --hard origin/master
         cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
