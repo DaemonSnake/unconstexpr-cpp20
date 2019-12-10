@@ -42,7 +42,6 @@ jobs:
 
         git add unconstexpr_godbolt.hpp
         git commit -m "Update godbolt header"
-        git push -f
 
     - name: Push changes
       uses: ad-m/github-push-action@master
