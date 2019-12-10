@@ -21,6 +21,11 @@ endif()
 add_library(unconstexpr INTERFACE)
 target_include_directories(unconstexpr INTERFACE include/)
 
+INSTALL (
+    DIRECTORY ${CMAKE_SOURCE_DIR}/include/unconstexpr/
+    DESTINATION include/unconstexpr
+    FILES_MATCHING PATTERN "*.h*")
+
 enable_testing()
 add_subdirectory(tests)
 
