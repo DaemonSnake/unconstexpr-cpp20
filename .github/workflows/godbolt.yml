@@ -31,11 +31,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2-beta
       with:
+        ref: master
+    - uses: actions/checkout@v2-beta
+      with:
         ref: godbolt
     - name: godbolt header
       run: |
-        git fetch refs/remotes/origin/master
-        git reset --hard refs/remotes/origin/master
+        git reset --hard master
         cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
 
         git config --local user.email "action@github.com"
