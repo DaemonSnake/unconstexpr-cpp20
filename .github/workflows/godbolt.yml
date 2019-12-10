@@ -30,13 +30,22 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2-beta
-    - uses: actions/checkout@godbolt
+      with:
+        ref: godbolt
     - name: godbolt header
       run: |
-        git reset --hard origin/master &&
-        cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp &&
-        git config --global user.name 'Bastien Penavayre' &&
-        git config --global user.email 'DaemonSnake@users.noreply.github.com' &&
-        git add unconstexpr_godbolt.hpp &&
-        git commit -m "Update godbolt header" &&
-        git push
+        git reset --hard origin/master
+        cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
+
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+        git add unconstexpr_godbolt.hpp
+        git commit -m "Update godbolt header"
+        git push -f
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: godbolt
+        github_token: ${{ secrets.GITHUB_TOKEN }}
