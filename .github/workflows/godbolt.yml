@@ -37,7 +37,8 @@ jobs:
         ref: godbolt
     - name: godbolt header
       run: |
-        git reset --hard master
+        git branch --list
+        git reset --hard origin/master
         cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
 
         git config --local user.email "action@github.com"
