@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2-beta
+    - uses: actions/checkout@v1
     - name: build preprocessed file
       run: cpp include/unconstexpr.hpp | grep -v '^#' > output.cpp && cat tests/unconstexpr.cpp  | grep -v 'unconstexpr.hpp' >> output.cpp
 
@@ -25,9 +25,14 @@ jobs:
     - name: test clang 9.0
       run: curl 'https://godbolt.org/api/compiler/clang900/compile?options=-std=c%2b%2b2a' --data-binary "$(cat output.cpp)"
 
+  header:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2-beta
     - name: godbolt header
       run: |
-        git checkout origin/godbolt &&
+        git checkout godbolt &&
         git reset --hard origin/master &&
         cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp &&
         git config --global user.name 'Bastien Penavayre' &&
