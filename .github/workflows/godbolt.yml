@@ -6,7 +6,33 @@ on:
       - master
 
 jobs:
-  build:
+  gcc:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: cmake
+      run: mkdir build && cd build && cmake ..
+    - name: test
+      run: make test
+
+    container:
+      image: 'gcc:latest'
+
+  clang:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: cmake
+      run: mkdir build && cd build && cmake ..
+    - name: test
+      run: make test
+
+    container:
+      image: 'clangbuiltlinux/ubuntu'
+
+  godbolt:
     runs-on: ubuntu-latest
     
     steps:
@@ -27,7 +53,3 @@ jobs:
 
     - name: godbolt header
       run: cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
-
-    container:
-      image: 'gcc:latest'
-    
