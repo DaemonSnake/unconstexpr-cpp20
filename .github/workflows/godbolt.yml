@@ -34,6 +34,7 @@ jobs:
         ref: godbolt
     - name: godbolt header
       run: |
+        git fetch origin/master
         git reset --hard origin/master
         cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
 
