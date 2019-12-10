@@ -27,7 +27,7 @@ jobs:
 
     - name: godbolt header
       run:  |
-        git checkout godbolt && 
+        git checkout origin/godbolt && 
         git reset --hard origin/master && 
         cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp &&
         git config --global user.name 'Bastien Penavayre'
