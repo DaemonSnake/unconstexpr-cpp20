@@ -6,32 +6,6 @@ on:
       - master
 
 jobs:
-  gcc:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v1
-    - name: cmake
-      run: mkdir build && cd build && cmake ..
-    - name: test
-      run: make test
-
-    container:
-      image: 'gcc:latest'
-
-  clang:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v1
-    - name: cmake
-      run: mkdir build && cd build && cmake ..
-    - name: test
-      run: make test
-
-    container:
-      image: 'clangbuiltlinux/ubuntu'
-
   godbolt:
     runs-on: ubuntu-latest
     
@@ -52,4 +26,4 @@ jobs:
       run: curl 'https://godbolt.org/api/compiler/clang900/compile?options=-std=c%2b%2b2a' --data-binary "$(cat output.cpp)"
 
     - name: godbolt header
-      run: cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
+      run:  git checkout godbolt && git reset --hard origin master && cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp && git add unconstexpr_godbolt && git commit -m "Update godbolt header" && git push origin godbolt
