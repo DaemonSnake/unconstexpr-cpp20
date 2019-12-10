@@ -26,12 +26,12 @@ jobs:
       run: curl 'https://godbolt.org/api/compiler/clang900/compile?options=-std=c%2b%2b2a' --data-binary "$(cat output.cpp)"
 
     - name: godbolt header
-      run:  |
-        git checkout origin/godbolt && 
-        git reset --hard origin/master && 
-        cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp &&
+      run:  &&
+        git checkout origin/godbolt
+        git reset --hard origin/master
+        cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
         git config --global user.name 'Bastien Penavayre'
         git config --global user.email 'DaemonSnake@users.noreply.github.com'
-        git add unconstexpr_godbolt.hpp &&
-        git commit -m "Update godbolt header" && 
+        git add unconstexpr_godbolt.hpp
+        git commit -m "Update godbolt header"
         git push origin godbolt
