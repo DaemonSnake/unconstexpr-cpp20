@@ -6,20 +6,27 @@ on:
       - master
 
 jobs:
-  preprocessed_test:
+  preprocess:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: build preprocessed header
+      run: cpp -C include/unconstexpr/unconstexpr.hpp > unconstexpr.hpp
     - name: build preprocessed file
-      run: cpp include/unconstexpr.hpp | grep -v '^#' > output.cpp && cat tests/unconstexpr.cpp  | grep -v 'unconstexpr.hpp' >> output.cpp
+      run:  grep -v '^#' unconstexpr.hpp > output.cpp && grep -v 'unconstexpr.hpp' tests/unconstexpr.cpp >> output.cpp
+    - uses: actions/upload-artifact@v1
+      with:
+          name: output
+          path: unconstexpr.hpp
     - uses: actions/upload-artifact@v1
       with:
           name: output
           path: output.cpp
 
+
   godbolt_test:
     runs-on: ubuntu-latest
-    needs: [preprocessed_test]
+    needs: [preprocess]
     strategy:
       matrix:
         compiler: ['gcc trunk', 'clang trunk', 'gcc 9.1', 'clang 9.0']
@@ -42,20 +49,22 @@ jobs:
 
   header:
     runs-on: ubuntu-latest
+    needs: [preprocess]
     
     steps:
     - uses: actions/checkout@v1
       with:
         ref: godbolt
+    - uses: actions/download-artifact@v1
+      with:
+          name: output
     - name: godbolt header
       run: |
-        git reset --hard origin/master
-        cpp include/unconstexpr.hpp > unconstexpr_godbolt.hpp
-
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
 
-        git add unconstexpr_godbolt.hpp
+        mv output/unconstexpr.hpp godbolt.hpp
+        git add godbolt.hpp
         git commit -m "Update godbolt header"
 
     - name: Push changes
