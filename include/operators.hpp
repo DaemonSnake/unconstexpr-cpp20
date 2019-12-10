@@ -1,3 +1,8 @@
+// Copyright (c) 2019 Bastien Penavayre
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 #pragma once
 
 #include "actions.hpp"
@@ -19,7 +24,7 @@ constexpr auto operator++(Meta const &, Opt...) {
 template <class Meta, class... Opt, HACKESSOR>
 constexpr auto operator--(Meta const &, Opt...) {
   constexpr bool is_postincrement = sizeof...(Opt) != 0;
-  using inc = value_t<-1*Meta::increment>;
+  using inc = value_t<-1 * Meta::increment>;
   return increment<Meta, is_postincrement, inc, Id>();
 }
 

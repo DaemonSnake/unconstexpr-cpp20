@@ -1,3 +1,8 @@
+// Copyright (c) 2019 Bastien Penavayre
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 #pragma once
 
 #include "unique_id.hpp"
@@ -7,12 +12,14 @@ namespace unconstexpr {
 
 template <auto Init = 0, auto Inc = 1, FORCE_UNIQUE()>
 struct meta_value {
-  template <auto Index> struct flagCheck {
+  template <auto Index>
+  struct flagCheck {
     template <id_value Id>
     friend constexpr auto adl(flagCheck, id_t<Id> const &);
   };
 
-  template<auto Index> struct flagGet {
+  template <auto Index>
+  struct flagGet {
     template <id_value Id>
     friend constexpr auto adl(flagGet, id_t<Id> const &);
   };
@@ -24,7 +31,7 @@ struct meta_value {
       return true;
     }
 
-    template<id_value Id>
+    template <id_value Id>
     friend constexpr auto adl(flagGet<Index>, id_t<Id> const &) {
       return ValueHolder::value;
     }
