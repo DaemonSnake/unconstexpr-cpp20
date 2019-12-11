@@ -135,6 +135,8 @@ Look at the __WEIRDNESS__ section below for caveats.
 Beforehand, friend injection is weird trick and is also know as the [Barton–Nackman trick](https://en.wikipedia.org/wiki/Barton%E2%80%93Nackman_trick).
 If your interested I recommend reading [Filip Roséen original blog]('http://b.atch.se/posts/constexpr-counter/') on how to implement mutable constexpr expressions and how it was used.
 
+It's thanks to this trick that we can control through template instantiation the definition or declaration of a globaly defined function.
+
 The new version looks like this:
 
 ```c++
@@ -148,7 +150,8 @@ struc flagCheck
 template<int I>
 struct flagGet
 {
-   friend constexpr auto adl(flagGet);
+   template<class Id>
+   friend constexpr auto adl(flagGet, Id);
 };
 
 template<int I, auto V>
@@ -157,7 +160,8 @@ struct writer
    template<class Id>
    friend constexpr auto adl(flagCheck<I>, Id) { return 0; }
 
-   friend constexpr auto adl(flagGet<I>) { return V; }
+   template<class Id>
+   friend constexpr auto adl(flagGet<I>, Id) { return V; }
 };
 ```
 
@@ -225,7 +229,7 @@ For instance: float, class with private member (c++20), user defined class (pre 
 
 ## Weirdness
 
-If you look at the source you will find that the main object `meta_value` only has statically defined operators and that the __Unique instantiation template__ isn't used in any pre-existing templated context.
+If you look at the source you will find that the main object `meta_value` only has statically defined operators and that the __Unique instantiation template__ isn't used in any nested templated context.
 
 The reason of this is that It doesn't work in a nested template context.
 In gcc the deduction fails and in clang it caused a segfault as of clang 9.0.0 but seems to have been fixed in trunk.
