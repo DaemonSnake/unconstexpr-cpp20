@@ -69,8 +69,7 @@ It is automatically generated at each push with a github action.
 
 ## How to use
 
-!!TODO!!
-
+TODO, you can check the test folder for now
 
 ## Juicy Hacks
 
