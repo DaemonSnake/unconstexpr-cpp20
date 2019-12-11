@@ -65,7 +65,7 @@ jobs:
 
         mv output/unconstexpr.hpp godbolt.hpp
         git add godbolt.hpp
-        git commit -m "Update godbolt header"
+        git commit -m "Update godbolt header" || exit 0
 
     - name: Push changes
       uses: ad-m/github-push-action@master
