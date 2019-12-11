@@ -39,4 +39,5 @@ int main() {
   v += value_t<42>{};
   using expected = tuple<int, std::nullptr_t, int>;
   static_assert(std::is_same_v<decltype(*v), expected>);
+  static_assert(!std::is_same_v<decltype(v), meta_value<>>);
 }
