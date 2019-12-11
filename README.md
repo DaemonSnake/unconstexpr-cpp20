@@ -93,7 +93,7 @@ constexpr auto unique_return() {
 static_assert(unique_return() != unique_return());
 ```
 This is the central new hack!
-In the project it is combined with __sfiae__ and __friend injection__ (see below).
+In the project it is combined with __sfinae__ and __friend injection__ (see below).
 
 At each template instantiation of `unique_return()` __X__ will have a new type.
 
