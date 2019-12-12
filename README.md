@@ -132,7 +132,7 @@ Look at the __WEIRDNESS__ section below for caveats.
 ### New friend injection
 
 Beforehand, friend injection is weird trick and is also know as the [Barton–Nackman trick](https://en.wikipedia.org/wiki/Barton%E2%80%93Nackman_trick).
-If your interested I recommend reading [Filip Roséen original blog]('http://b.atch.se/posts/constexpr-counter/') on how to implement mutable constexpr expressions and how it was used.
+If your interested I recommend reading Filip Roséen original blog (http://b.atch.se/posts/constexpr-counter/) on how to implement mutable constexpr expressions and how it was used.
 
 It's thanks to this trick that we can control through template instantiation the definition or declaration of a globaly defined function.
 
