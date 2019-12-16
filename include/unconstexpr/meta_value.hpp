@@ -15,31 +15,31 @@ struct meta_value {
   template <auto Index>
   struct flagCheck {
     template <id_value Id>
-    friend constexpr auto adl(flagCheck, id_t<Id> const &);
+    friend constexpr auto unconstexpr_adl(flagCheck, id_t<Id> const &);
   };
 
   template <auto Index>
   struct flagGet {
     template <id_value Id>
-    friend constexpr auto adl(flagGet, id_t<Id> const &);
+    friend constexpr auto unconstexpr_adl(flagGet, id_t<Id> const &);
   };
 
   template <auto Index, class ValueHolder = value_t<Index>>
   struct writer {
     template <id_value Id>
-    friend constexpr auto adl(flagCheck<Index>, id_t<Id> const &) {
+    friend constexpr auto unconstexpr_adl(flagCheck<Index>, id_t<Id> const &) {
       return true;
     }
 
     template <id_value Id>
-    friend constexpr auto adl(flagGet<Index>, id_t<Id> const &) {
+    friend constexpr auto unconstexpr_adl(flagGet<Index>, id_t<Id> const &) {
       return ValueHolder::value;
     }
   };
 
   static_assert(sizeof(writer<0, value_t<Init>>));
 
-  template <auto Index, class T, class = decltype(adl(flagCheck<Index>{}, T{}))>
+  template <auto Index, class T, class = decltype(unconstexpr_adl(flagCheck<Index>{}, T{}))>
   static constexpr bool exists(int) {
     return true;
   }
@@ -62,7 +62,7 @@ struct meta_value {
   template <id_value Id, auto Index>
   static constexpr auto value() {
     using unique_type = id_t<Id>;
-    return adl(flagGet<Index>{}, unique_type{});
+    return unconstexpr_adl(flagGet<Index>{}, unique_type{});
   }
 
   static constexpr bool is_meta_var = true;

@@ -18,7 +18,6 @@ int main() {
 
   constexpr auto v = meta_value{};
   static_assert(*v == 0);
-
   static_assert(increment(v) == 1);
   static_assert(*v == 1);
   static_assert(++v == 2);
@@ -31,7 +30,6 @@ int main() {
 
   v << [] { return "hello"sv; };
   static_assert(*v == "hello"sv);
-
 
   v << [] { return tuple<>{}; };
   v += value_t<42>{};

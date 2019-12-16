@@ -1,8 +1,7 @@
 // Copyright (c) 2019 Bastien Penavayre
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-
 
 #pragma once
 
@@ -31,9 +30,10 @@ constexpr auto current_value(Meta const& = {}) {
 namespace increment_hack {
 /**
   To circomvent bug in clang:
-  Constexpr variables aren't implicitly captured in lambda expressions if we are in a template context.
-  As some of the following constexpr variable might be invalid non-type template parameter,
-  we defines them here so that we can access them from a default-construstible lambda and pass it around.
+  Constexpr variables aren't implicitly captured in lambda expressions if we are
+  in a template context. As some of the following constexpr variable might be
+  invalid non-type template parameter, we defines them here so that we can
+  access them from a default-construstible lambda and pass it around.
 */
 template <class Meta, class ValueInc, id_value Id>
 struct increment_info {

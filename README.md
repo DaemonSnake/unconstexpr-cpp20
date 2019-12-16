@@ -143,24 +143,24 @@ template<int I>
 struc flagCheck
 {
    template<class Id>
-   friend constexpr auto adl(flagCheck, Id);
+   friend constexpr auto unconstexpr_adl(flagCheck, Id);
 };
 
 template<int I>
 struct flagGet
 {
    template<class Id>
-   friend constexpr auto adl(flagGet, Id);
+   friend constexpr auto unconstexpr_adl(flagGet, Id);
 };
 
 template<int I, auto V>
 struct writer
 {
    template<class Id>
-   friend constexpr auto adl(flagCheck<I>, Id) { return 0; }
+   friend constexpr auto unconstexpr_adl(flagCheck<I>, Id) { return 0; }
 
    template<class Id>
-   friend constexpr auto adl(flagGet<I>, Id) { return V; }
+   friend constexpr auto unconstexpr_adl(flagGet<I>, Id) { return V; }
 };
 ```
 
@@ -174,7 +174,7 @@ First the auto return type:
 
 As deducing the return type isn't possible before the definition, this allows the following:
 ```c++
-template<int I, class Id, class = decltype(adl(flagCheck<I>{}, Id{}))>
+template<int I, class Id, class = decltype(unconstexpr_adl(flagCheck<I>{}, Id{}))>
 constexpr bool exist(int) { return true; }
 
 template<int I, class Id>
