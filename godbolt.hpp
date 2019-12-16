@@ -62,16 +62,15 @@
 
 # 1 "include/unconstexpr/actions.hpp" 1
 // Copyright (c) 2019 Bastien Penavayre
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-
 
        
 
 # 1 "include/unconstexpr/unique_id.hpp" 1
 // Copyright (c) 2019 Bastien Penavayre
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -101,10 +100,10 @@ struct unique_id {
 
 
 } // namespace unconstexpr
-# 10 "include/unconstexpr/actions.hpp" 2
+# 9 "include/unconstexpr/actions.hpp" 2
 # 1 "include/unconstexpr/utils.hpp" 1
 // Copyright (c) 2019 Bastien Penavayre
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -121,7 +120,7 @@ struct value_lambda {
   static constexpr auto value = Lambda{}();
 };
 } // namespace unconstexpr
-# 11 "include/unconstexpr/actions.hpp" 2
+# 10 "include/unconstexpr/actions.hpp" 2
 
 // force each call to be a new template instanciation
 // checks that Meta is a meta_var
@@ -145,9 +144,10 @@ constexpr auto current_value(Meta const& = {}) {
 namespace increment_hack {
 /**
   To circomvent bug in clang:
-  Constexpr variables aren't implicitly captured in lambda expressions if we are in a template context.
-  As some of the following constexpr variable might be invalid non-type template parameter,
-  we defines them here so that we can access them from a default-construstible lambda and pass it around.
+  Constexpr variables aren't implicitly captured in lambda expressions if we are
+  in a template context. As some of the following constexpr variable might be
+  invalid non-type template parameter, we defines them here so that we can
+  access them from a default-construstible lambda and pass it around.
 */
 template <class Meta, class ValueInc, id_value Id>
 struct increment_info {
@@ -212,31 +212,31 @@ struct meta_value {
   template <auto Index>
   struct flagCheck {
     template <id_value Id>
-    friend constexpr auto adl(flagCheck, id_t<Id> const &);
+    friend constexpr auto unconstexpr_adl(flagCheck, id_t<Id> const &);
   };
 
   template <auto Index>
   struct flagGet {
     template <id_value Id>
-    friend constexpr auto adl(flagGet, id_t<Id> const &);
+    friend constexpr auto unconstexpr_adl(flagGet, id_t<Id> const &);
   };
 
   template <auto Index, class ValueHolder = value_t<Index>>
   struct writer {
     template <id_value Id>
-    friend constexpr auto adl(flagCheck<Index>, id_t<Id> const &) {
+    friend constexpr auto unconstexpr_adl(flagCheck<Index>, id_t<Id> const &) {
       return true;
     }
 
     template <id_value Id>
-    friend constexpr auto adl(flagGet<Index>, id_t<Id> const &) {
+    friend constexpr auto unconstexpr_adl(flagGet<Index>, id_t<Id> const &) {
       return ValueHolder::value;
     }
   };
 
   static_assert(sizeof(writer<0, value_t<Init>>));
 
-  template <auto Index, class T, class = decltype(adl(flagCheck<Index>{}, T{}))>
+  template <auto Index, class T, class = decltype(unconstexpr_adl(flagCheck<Index>{}, T{}))>
   static constexpr bool exists(int) {
     return true;
   }
@@ -259,7 +259,7 @@ struct meta_value {
   template <id_value Id, auto Index>
   static constexpr auto value() {
     using unique_type = id_t<Id>;
-    return adl(flagGet<Index>{}, unique_type{});
+    return unconstexpr_adl(flagGet<Index>{}, unique_type{});
   }
 
   static constexpr bool is_meta_var = true;
