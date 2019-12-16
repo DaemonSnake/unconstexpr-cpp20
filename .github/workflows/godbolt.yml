@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+  schedule:
+    # Every sunday
+    - cron:  '0 0 * * 0'
 
 jobs:
   preprocess:
