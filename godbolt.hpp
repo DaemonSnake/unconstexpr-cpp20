@@ -320,11 +320,5 @@ constexpr auto operator<<(Meta const &c, value_t<Value> const &) {
   return c;
 }
 
-template <class Meta, class Holder, id_value Id = unique_id([] {}), bool = Meta::is_meta_var>
-constexpr auto operator<<(Meta const &c, Holder const &) {
-  static_assert(sizeof(set<Meta, Holder, Id>()));
-  return c;
-}
-
 } // namespace unconstexpr
 # 10 "include/unconstexpr/unconstexpr.hpp" 2
