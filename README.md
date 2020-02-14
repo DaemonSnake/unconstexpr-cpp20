@@ -15,6 +15,7 @@ What to expect:
 Simplest example: 
 - constexpr global counter à-la __\_\_COUNTER\_\___
 ```c++
+//link: https://godbolt.org/z/usQC_A
 constexpr auto counter = unconstexpr::meta_value{};
 static_assert(counter++ == 0);
 static_assert(counter++ == 1);
@@ -25,20 +26,20 @@ More exciting:
 ```c++
 //include + using namespace std::literals ...
 
-constexpr auto var = unconstexpr::meta_var{};
+constexpr auto var = unconstexpr::meta_value{};
 
 var << []{ return "hello"sv; };
 static_assert(*var == "hello"sv);
 static_assert(std::is_same_v<decltype(*var), std::string_view>);
 
-var << unconstexpr::value_v<52>{};
+var << unconstexpr::value_t<52>{};
 static_assert(*var == 52);
 static_assert(std::is_same_v<decltype(*var), int>);
 ```
 
 Weirder:
 ```c++
-using c = unconstexpr::meta_var<>;
+using c = unconstexpr::meta_value<>;
 static_assert(sizeof(set(c{}, []{ return "hello"sv; })));
 static_assert(get(c{}) == "hello"sv);
 
