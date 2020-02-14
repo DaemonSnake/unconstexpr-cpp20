@@ -40,15 +40,15 @@ constexpr auto operator+=(Meta const &c, Lambda const &) {
   return c;
 }
 
-template <class Meta, class Holder, HACKESSOR>
-constexpr auto operator<<(Meta const &c, Holder const &) {
-  static_assert(sizeof(set<Meta, Holder, Id>()));
-  return c;
-}
-
 template <class Meta, auto Value, HACKESSOR>
 constexpr auto operator<<(Meta const &c, value_t<Value> const &) {
   static_assert(sizeof(set<Meta, Value, Id>()));
+  return c;
+}
+
+template <class Meta, class Holder, HACKESSOR>
+constexpr auto operator<<(Meta const &c, Holder const &) {
+  static_assert(sizeof(set<Meta, Holder, Id>()));
   return c;
 }
 
