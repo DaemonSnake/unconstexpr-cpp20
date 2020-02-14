@@ -24,6 +24,7 @@ static_assert(*counter == 2);
 
 More exciting:
 ```c++
+//link: https://godbolt.org/z/iqCTQp
 //include + using namespace std::literals ...
 
 constexpr auto var = unconstexpr::meta_value{};
