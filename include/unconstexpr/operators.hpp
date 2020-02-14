@@ -46,4 +46,10 @@ constexpr auto operator<<(Meta const &c, Holder const &) {
   return c;
 }
 
+template <class Meta, auto Value, HACKESSOR>
+constexpr auto operator<<(Meta const &c, value_t<Value> const &) {
+  static_assert(sizeof(set<Meta, Value, Id>()));
+  return c;
+}
+
 }  // namespace unconstexpr
