@@ -5,7 +5,7 @@
 # 1 "/usr/include/stdc-predef.h" 1 3 4
 
 # 1 "/usr/include/stdc-predef.h" 3 4
-/* Copyright (C) 1991-2018 Free Software Foundation, Inc.
+/* Copyright (C) 1991-2020 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 
    You should have received a copy of the GNU Lesser General Public
    License along with the GNU C Library; if not, see
-   <http://www.gnu.org/licenses/>.  */
+   <https://www.gnu.org/licenses/>.  */
 
 
 
@@ -46,9 +46,6 @@
    - 56 emoji characters
    - 285 hentaigana
    - 3 additional Zanabazar Square characters */
-
-
-/* We do not support C11 <threads.h>.  */
 # 32 "<command-line>" 2
 # 1 "include/unconstexpr/unconstexpr.hpp"
 
