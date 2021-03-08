@@ -14,9 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: build preprocessed header
-      run: cpp -C include/unconstexpr/unconstexpr.hpp > unconstexpr.hpp
+      run: cpp -C include/unconstexpr/unconstexpr.hpp -P > unconstexpr.hpp
     - name: build preprocessed file
-      run:  grep -v '^#' unconstexpr.hpp > output.cpp && grep -v 'unconstexpr.hpp' tests/unconstexpr.cpp >> output.cpp
+      run:  cp unconstexpr.hpp output.cpp && grep -v 'unconstexpr.hpp' tests/unconstexpr.cpp >> output.cpp
     - uses: actions/upload-artifact@v1
       with:
           name: output
