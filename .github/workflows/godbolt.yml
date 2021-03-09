@@ -38,10 +38,14 @@ jobs:
             id: 'gsnapshot'
           - compiler: 'clang trunk'
             id: 'clang_trunk'
+          - compiler: 'msvc trunk'
+            id: 'vcpp_v19_latest_x64'
           - compiler: 'gcc 9.1'
             id: 'g91'
           - compiler: 'clang 9.0' 
             id: 'clang900'
+          - compiler: 'msvc 19.25'
+            id: 'vcpp_v19_25_x64'
 
     steps:
     - uses: actions/download-artifact@v1
