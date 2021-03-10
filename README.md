@@ -3,9 +3,11 @@
 
 ## Mission statement
 
-Implement mutable constant expression for __gcc__ and __clang__ (ie: breaking type safety).
+Implement mutable constant expression for gcc, clang and MSVC.
 
-It requires at least ___gcc 9.1___ and ___clang 9.0___
+It requires at least __gcc 9.1__, __clang 9.0__ and __MSVC 19.25__
+
+Validity is checked weekly against the trunk and minimum version of the supported compilers.
 
 What to expect:
 * `static_assert` and `sizeof` with side effects
