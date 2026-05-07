@@ -60,7 +60,7 @@ As both compiler don't have __c++20__ fully implemented yet some features that w
 the writing of this library weren't used.
 
 On a lesser note, I've wrote this in a hurry and might contain typos.
-If some sections aren't clair or I'm factually incorrect don't hesitate to correct me.
+If some sections aren't clear or I'm factually incorrect don't hesitate to correct me.
 Thanks!
 
 ## [bolt is Godbolt is Godbolt is God]
@@ -144,7 +144,7 @@ The new version looks like this:
 
 ```c++
 template<int I>
-struc flagCheck
+struct flagCheck
 {
    template<class Id>
    friend constexpr auto unconstexpr_adl(flagCheck, Id);
@@ -227,14 +227,14 @@ void fn()
 }
 ```
 This trick exploits lambdas' default-constructivity (c++20) and constexpr-ness (c++17).
-This allows to hide inside a type a value that wouldn't be allowed as a non-type template parameter but is still constexpr.
+This allows us to hide inside a type a value that wouldn't be allowed as a non-type template parameter but is still constexpr.
 For instance: float, class with private member (c++20), user defined class (pre c++20), etc.
 
 ## Weirdness
 
 If you look at the source you will find that the main object `meta_value` only has statically defined operators and that the __Unique instantiation template__ isn't used in any nested templated context.
 
-The reason of this is that It doesn't work in a nested template context.
+The reason for this is that It doesn't work in a nested template context.
 In gcc the deduction fails and in clang it caused a segfault as of clang 9.0.0 but seems to have been fixed in trunk.
 You can find an simple example illustrating this [here](https://godbolt.org/z/fYKSEd).
 Sadly `lambda in unevaluated context` doesn't seem to fix this as we can see with [this gcc example](https://godbolt.org/z/PqvNMv)
